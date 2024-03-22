@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+xclip -sel clipboard -o \
+| tr -s '\n' \
+| sed '/-$/N;s/-\n//' \
+| tr '\n' ' ' \
+| sed -e 's/^[ \t]*//' -e 's/[ \t]*$//' \
+| tr -s ' ' \
+| xclip -sel clipboard
+
+echo "$(xclip -sel clipboard -o)"
+
+# Get clipboard content
+# Remove all consecutive newlines
+# Remove hyphen followed by newline
+# Replace newlines with space
+# Remove leading and trailing whitespaces
+# Replace multiple spaces with single space
+# Update clipboard with clean text
+
+# echo to terminal in case i want to use the output for something else

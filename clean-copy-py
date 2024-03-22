@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+import subprocess
+
+# Function to read clipboard content
+def read_clipboard():
+    process = subprocess.Popen(['xclip', '-selection', 'clipboard', '-o'], stdout=subprocess.PIPE)
+    clipboard_content, _ = process.communicate()
+    return clipboard_content.decode('utf-8')
+
+# Function to write content to clipboard
+def write_clipboard(content):
+    process = subprocess.Popen(['xclip', '-selection', 'clipboard'], stdin=subprocess.PIPE)
+    process.communicate(content.encode('utf-8'))
+
+# Function to clean up the text
+def clean_text(text):
+    text = '\n'.join(line.strip() for line in text.splitlines() if line.strip())  # Remove consecutive newlines
+    text = text.replace('-\n', '')  # Remove hyphen followed by newline
+    text = text.replace('\n', ' ')  # Replace newlines with space
+    text = ' '.join(text.split())    # Remove extra spaces
+    return text
+
+# Main function
+def main():
+    clipboard_content = read_clipboard()
+    cleaned_content = clean_text(clipboard_content)
+    write_clipboard(cleaned_content)
+    print(cleaned_content)  # Output cleaned content to terminal
+
+# Run main function
+if __name__ == "__main__":
+    main()

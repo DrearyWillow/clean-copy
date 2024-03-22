@@ -1,0 +1,38 @@
+#!/usr/bin/env lua
+
+-- Function to read clipboard content
+function readClipboard()
+    local handle = io.popen("xclip -sel clipboard -o")
+    local content = handle:read("*a")
+    handle:close()
+    return content
+end
+
+-- Function to write content to clipboard
+function writeClipboard(content)
+    local handle = io.popen("xclip -sel clipboard", "w")
+    handle:write(content)
+    handle:close()
+end
+
+-- Function to clean up the text
+function cleanText(text)
+    text = text:gsub("\n+", "\n")  -- Remove consecutive newlines
+    text = text:gsub("-\n", "")    -- Remove hyphen followed by newline
+    text = text:gsub("\n", " ")    -- Replace newlines with space
+    text = text:gsub("^%s+", "")   -- Remove leading whitespaces
+    text = text:gsub("%s+$", "")   -- Remove trailing whitespaces
+    text = text:gsub("%s+", " ")   -- Replace multiple spaces with single space
+    return text
+end
+
+-- Main function
+function main()
+    local clipboardContent = readClipboard()
+    local cleanedContent = cleanText(clipboardContent)
+    writeClipboard(cleanedContent)
+    print(cleanedContent)  -- Output cleaned content to terminal
+end
+
+-- Run main function
+main()
