@@ -1,0 +1,37 @@
+#!/bin/bash
+
+
+
+# Function to clean clipboard content
+clean_clipboard() {
+    cleaned_content=$(xclip -sel clipboard -o \
+    | tr -s '\n' \
+    | sed '/-$/N;s/-\n//' \
+    | tr '\n' ' ' \
+    | sed -e 's/^[ \t]*//' -e 's/[ \t]*$//' \
+    | tr -s ' ')
+    
+    # Output cleaned content
+    echo -n "$cleaned_content"
+}
+
+# Check if "-e" is passed as an argument
+if [ "$1" = "-e" ]; then
+    #print cleaned content to terminal
+    clean_clipboard
+    echo
+else
+    #replace clipboard contents
+    clean_clipboard | xclip -sel clipboard
+fi
+
+
+# Get clipboard content
+# Remove all consecutive newlines
+# Remove hyphen followed by newline
+# Replace newlines with space
+# Remove leading and trailing whitespaces
+# Replace multiple spaces with single space
+# Update clipboard with clean text
+
+# echo to terminal in case i want to use the output for something else
